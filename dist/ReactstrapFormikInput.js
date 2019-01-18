@@ -11,6 +11,10 @@ var ReactstarpFormikInput = function ReactstarpFormikInput(_ref) {
         rest = _objectWithoutProperties(_ref$form, ["touched", "errors"]),
         props = _objectWithoutProperties(_ref, ["field", "form"]);
 
+    var allErrors = props.errors || [];
+    if (touched[fields.name] && errors[fields.name]) {
+        allErrors.push(errors[fields.name]);
+    }
     return React.createElement(
         FormGroup,
         null,
@@ -19,12 +23,14 @@ var ReactstarpFormikInput = function ReactstarpFormikInput(_ref) {
             { "for": fields.name, className: "label-color" },
             props.label
         ),
-        React.createElement(Input, Object.assign({}, props, fields, { invalid: Boolean(touched[fields.name] && errors[fields.name]) })),
-        touched[fields.name] && errors[fields.name] ? React.createElement(
-            FormFeedback,
-            null,
-            errors[fields.name]
-        ) : ''
+        React.createElement(Input, Object.assign({}, props, fields, { invalid: Boolean(allErrors.length) })),
+        allErrors.map(function (e, i) {
+            return React.createElement(
+                FormFeedback,
+                { key: i },
+                e
+            );
+        })
     );
 };
 export default ReactstarpFormikInput;

@@ -6,11 +6,17 @@ const ReactstarpFormikInput = (
         field: {...fields},
         form: {touched, errors, ...rest},
         ...props
-    }) => (
-    <FormGroup>
-        <Label for={fields.name} className={"label-color"}>{props.label}</Label>
-        <Input {...props} {...fields} invalid={Boolean(touched[fields.name] && errors[fields.name])}/>
-        {touched[fields.name] && errors[fields.name] ? <FormFeedback>{errors[fields.name]}</FormFeedback> : ''}
-    </FormGroup>
-);
+    }) => {
+      const allErrors = props.errors || [];
+      if (touched[fields.name] && errors[fields.name]) {
+        allErrors.push(errors[fields.name]);
+      }
+      return (
+        <FormGroup>
+            <Label for={fields.name} className={"label-color"}>{props.label}</Label>
+            <Input {...props} {...fields} invalid={Boolean(allErrors.length)}/>
+            {allErrors.map((e, i) => <FormFeedback key={i}>{e}</FormFeedback>)}
+        </FormGroup>
+      );
+    }
 export default ReactstarpFormikInput;
